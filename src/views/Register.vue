@@ -4,50 +4,27 @@
             <v-layout align-center justify-center>
                 <v-flex xs12 sm8 md4>
                     <v-card class="elevation-6">
-                        <v-toolbar color="primary" dark text>
+                        <v-toolbar color="white" dark text class="elevation-0">
                             <v-toolbar-title>
                                 <v-flex xs12>
-                                    <!--
                                     <v-img
-                                            :src="require('../assets/logo-pro-saude.png')"
+                                            :src="require('../assets/TECHNURSE_logo.jpg')"
                                             class="my-3"
                                             contain
-                                            height="50"
+                                            height="150"
                                     ></v-img>
-                                    -->
                                 </v-flex>
                             </v-toolbar-title>
                         </v-toolbar>
                         <v-card-text>
                             <v-form>
                                 <v-text-field
-                                        placeholder="Nome Completo"
                                         outlined
                                         label="Nome Completo"
                                         v-model="name"
                                         prepend-icon="person"
                                         type="text"
                                 ></v-text-field>
-
-                                <v-text-field
-                                        placeholder="00000"
-                                        outlined
-                                        label="CRM"
-                                        v-model="crm"
-                                        prepend-icon="credit_card"
-                                        type="number"
-                                ></v-text-field>
-
-                                <v-select
-                                        prepend-icon="school"
-                                        :items="specialtiesOptions"
-                                        label="Especialidades"
-                                        outlined
-                                        multiple
-                                        v-model="specialties"
-                                        clearable
-                                        chips
-                                ></v-select>
 
                                 <v-text-field
                                         placeholder="exemplo@gmail.com"
@@ -60,7 +37,6 @@
 
                                 <v-text-field
                                         outlined
-                                        type="password"
                                         label="Senha"
                                         v-model="password"
                                         prepend-icon="lock"
@@ -68,34 +44,51 @@
                                         :type="show_password ? 'text' : 'password'"
                                         @click:append="show_password = !show_password"
                                 ></v-text-field>
+
+                                <v-slider
+                                        color="teal accent-3"
+                                        v-model="value"
+                                        step="40"
+                                        ticks="always"
+                                        tick-size="3"
+                                ></v-slider>
+
+                                <v-radio
+                                        v-model="abc"
+                                        readonly
+                                        label="Pelo menos 6 caracteres"
+                                        color="teal accent-3"
+                                ></v-radio>
+                                <v-radio
+                                        v-model="AZ"
+                                        readonly
+                                        label="Pelo menos uma letra maiúscula"
+                                        color="teal accent-3"
+                                ></v-radio>
+                                <v-radio
+                                        v-model="number123"
+                                        label="Pelo menos 1 número"
+                                        color="teal accent-3"
+                                ></v-radio>
+                                <p></p>
                                 <v-text-field
                                         outlined
-                                        type="password"
                                         label="Confirmação de senha"
                                         v-model="confirm_password"
                                         prepend-icon="lock"
-                                        :append-icon="show_confirm_password ? 'visibility' : 'visibility_off'"
-                                        :type="show_confirm_password ? 'text' : 'password'"
-                                        @click:append="show_confirm_password = !show_confirm_password"
-                                >
-                                </v-text-field>
+                                        :append-icon="show_password ? 'visibility' : 'visibility_off'"
+                                        :type="show_password ? 'text' : 'password'"
+                                        @click:append="show_password = !show_password"
+                                ></v-text-field>
                             </v-form>
                             <v-layout align-center justify-center>
                                 <v-btn
-                                        color="primary"
-                                        outlined
-                                        :to="{ name: 'Login'}"
-                                >
-                                    Login
-                                </v-btn>
-                                <v-spacer></v-spacer>
-                                <v-btn
-
-                                        @click="null"
-                                        color="primary"
+                                        dark
+                                        large
+                                        color="teal accent-3"
                                         :disabled="!formIsValid"
                                 >
-                                    criar Conta
+                                    Criar Conta
                                 </v-btn>
                             </v-layout>
                         </v-card-text>
@@ -110,44 +103,19 @@
 <script>
     export default {
         data: () => ({
+            value: 0,
+            abc: false,
+            AZ: true,
+            Number123: false,
             name: null,
-            crm: null,
             email: null,
             password: null,
             confirm_password:null,
             show_password: false,
-            show_confirm_password: false,
-            specialties: [],
-            specialtiesOptions: [
-                'Clinico Geral',
-                'Cirurgiao Geral',
-                'Cardiologia',
-                'Dermatologia',
-                'Endocrinologia',
-                'Fonoaudiologia',
-                'Gastrenterologia',
-                'Ginecologia',
-                'Infectologia',
-                'Mastologia',
-                'Neurologia',
-                'Neuropediatria',
-                'Nutricionista',
-                'Oncologia',
-                'Obstetrícia',
-                'Ortopedia',
-                'Otorrinolaringologia',
-                'Peneumologia',
-                'Psiquiatria',
-                'Psicologia',
-                'Proctologia',
-                'Pediatria',
-                'Reumatologia',
-                'Urologia'
-            ],
         }),
         computed:{
             formIsValid () {
-                return this.email && this.password && this.name && this.crm && this.specialties.length > 0
+                return this.name && this.email && this.password && this.confirm_password
             },
         },
     }
