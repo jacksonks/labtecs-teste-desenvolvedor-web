@@ -7,9 +7,7 @@ Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
     storage: window.localStorage,
-    modules: [
-        'User'
-    ]
+    modules: ['User']
 })
 
 export const store = new Vuex.Store({
@@ -17,8 +15,61 @@ export const store = new Vuex.Store({
     modules: {
         User
     },
-    state: {},
-    mutations: {},
-    actions: {},
-    getters: {}
-});
+    state: {
+        loader: false,
+        error: null,
+        email:null,
+    },
+    mutations: {
+        setLoader(state, payload) {
+            state.loading = payload
+        },
+
+        setError(state, payload) {
+            state.error = payload
+        },
+
+        clearError(state, payload) {
+            state.error = null
+        },
+
+        setEmail(state, payload) {
+            state.email = payload
+        },
+
+        clearEmail(state) {
+            state.email = null
+        },
+    },
+    actions: {
+        clearError({commit}) {
+            commit('clearError')
+        },
+
+        email({commit}, payload){
+            this.$http.get('api/user',{
+                headers: {
+                    Authorization: 'Bearer ' + payload.token
+                }
+            })
+                .then((response) => {
+                    commit('setEmail', response.data.email)
+                })
+                .catch((e) => {
+                })
+
+        }
+    },
+    getters: {
+        loader(state) {
+            return state.loading
+        },
+        error(state) {
+            return state.error
+        },
+        email(state){
+            return state.email
+        }
+    }
+
+})

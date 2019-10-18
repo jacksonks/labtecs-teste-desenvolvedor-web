@@ -11,17 +11,26 @@ export default new Router({
         {
             path: '/',
             name: 'Register',
-            component: Register
+            component: Register,
+            meta: {
+                guest: true
+            }
         },
         {
             path: '/Login',
             name: 'Login',
-            component: Login
+            component: Login,
+            meta: {
+                guest: true
+            }
         },
         {
             path: '/Administration',
             name: 'Administration',
-            component: Administration
+            component: Administration,
+            meta: {
+                requiresAuth: true
+            }
         },
     ],
     mode: 'history'

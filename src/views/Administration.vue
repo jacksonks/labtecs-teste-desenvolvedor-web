@@ -21,15 +21,47 @@
                         </div>
                         <v-container text-center>
                             <v-flex>
-                                <strong>
-                                    Seja Bem vindo à TechNurse
-                                </strong>
-                                <h4>
+                                <h3>
+                                    Seja Bem vindo:
+                                </h3>
+                                <h2>
                                     {{email}}
-                                </h4>
+                                </h2>
                             </v-flex>
 
                         </v-container>
+                        <v-layout align-center justify-center>
+                            <v-dialog v-model="dialog" persistent max-width="355">
+                                <template v-slot:activator="{ on }">
+                                    <v-btn
+                                            dark
+                                            v-on="on"
+                                    >
+                                        Sair
+                                        <v-icon right>exit_to_app</v-icon>
+                                    </v-btn>
+                                </template>
+                                <v-card>
+                                    <v-card-title>Deseja Sair: {{ email }} ?</v-card-title>
+                                    <v-divider></v-divider>
+                                    <v-card-actions>
+                                        <v-btn
+                                                color="error"
+                                                @click="dialog = false"
+                                        >
+                                            NÃO
+                                        </v-btn>
+                                        <v-spacer></v-spacer>
+                                        <v-btn
+                                                color="success"
+                                                @click="sair"
+                                        >
+                                            SIM
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </v-layout>
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -40,8 +72,23 @@
 <script>
     export default {
         data: () => ({
-            email: 'jkdsgg@gmail.com',
+            dialog: false
         }),
+        mounted(){
+            var token = this.$store.getters.user
+            this.$store.dispatch('email',{token:token})
+        },
+        computed:{
+            email(){
+                return this.$store.getters.email
+            }
+        },
+        methods:{
+            sair(){
+                this.$store.dispatch('logOut')
+                this.$router.push('/Login')
+            },
+        }
     }
 </script>
 

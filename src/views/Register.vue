@@ -1,6 +1,11 @@
 <template>
     <v-content>
         <v-container fluid fill-heigh>
+            <v-layout row v-if="error">
+                <v-flex xs12 sm6 offset-sm3>
+                    <app-alert @dismissed="onDismissed" :text="error"></app-alert>
+                </v-flex>
+            </v-layout>
             <v-layout align-center justify-center>
                 <v-flex xs12 sm8 md4>
                     <v-card class="elevation-6">
@@ -17,7 +22,7 @@
                             </v-toolbar-title>
                         </v-toolbar>
                         <v-card-text>
-                            <v-form>
+                            <v-form @submit.prevent="Registrar">
                                 <v-text-field
                                         outlined
                                         placeholder="Nome Completo"
@@ -67,41 +72,42 @@
                                         color="teal accent-3"
                                         :rules="[passwords]"
                                 ></v-text-field>
+
+                                <v-layout align-center justify-center row wrap>
+                                    <v-flex xs12>
+                                        <div class="text-center">
+                                            <v-btn
+                                                    block
+                                                    tile
+                                                    class="white--text"
+                                                    color="teal accent-3"
+                                                    :disabled="!formIsValid || loader"
+                                                    :loading="loader"
+                                                    type="submit"
+                                            >
+                                                Criar Conta
+                                                <template v-slot:loader>
+                                                    <span>Aguarde...</span>
+                                                </template>
+                                            </v-btn>
+                                            <br/>
+                                            <v-flex xs12>
+                                                <div>
+                                                    <v-btn
+                                                            block
+                                                            tile
+                                                            outlined
+                                                            color="teal accent-3"
+                                                            to="/Login"
+                                                    >
+                                                        Já tem uma conta? <v-icon>touch_app</v-icon> Login
+                                                    </v-btn>
+                                                </div>
+                                            </v-flex>
+                                        </div>
+                                    </v-flex>
+                                </v-layout>
                             </v-form>
-                            <v-layout align-center justify-center row wrap>
-                                <v-flex xs12>
-                                    <div class="text-center">
-                                        <v-btn
-                                                block
-                                                tile
-                                                class="white--text"
-                                                color="teal accent-3"
-                                                :disabled="!formIsValid"
-                                                :loading="loading"
-                                                @click="loader = 'loading'"
-                                        >
-                                            Criar Conta
-                                            <template v-slot:loader>
-                                                <span>Aguarde...</span>
-                                            </template>
-                                        </v-btn>
-                                        <br/>
-                                        <v-flex xs12>
-                                            <div>
-                                                <v-btn
-                                                        block
-                                                        tile
-                                                        outlined
-                                                        color="teal accent-3"
-                                                        to="/Login"
-                                                >
-                                                    Já tem uma conta? <v-icon>touch_app</v-icon> Login
-                                                </v-btn>
-                                            </div>
-                                        </v-flex>
-                                    </div>
-                                </v-flex>
-                            </v-layout>
                         </v-card-text>
                     </v-card>
                 </v-flex>
@@ -114,8 +120,6 @@
 <script>
     export default {
         data: () => ({
-            loader: null,
-            loading: false,
             size: false,
             AZ: false,
             number: false,
@@ -139,8 +143,22 @@
                     return ''
                 }
             },
+            user(){
+                return this.$store.getters.user
+            },
+            error(){
+                return this.$store.getters.error
+            },
+            loader(){
+                return this.$store.getters.loader
+            },
         },
         watch: {
+            user(value){
+                if(value !== null && value !== undefined){
+                    this.$router.push('/Administration')
+                }
+            },
             password(val) {
                 if (val.length >= 6) {
                     this.size = true
@@ -158,18 +176,12 @@
                     this.number = false
                 }
             },
-            loader () {
-                const l = this.loader
-                this[l] = !this[l]
-
-                setTimeout(() => (this.redirect()), 3000)
-
-                this.loader = null
-            },
         },
+
         methods:{
-            redirect(){
-                this.$router.push('/Administration')
+            Registrar(){
+                this.loader = true;
+                this.$store.dispatch('registerUser',{email:this.email,password:this.password,confirm_password:this.confirm_password})
             }
         }
     }

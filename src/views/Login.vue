@@ -17,7 +17,7 @@
                             </v-toolbar-title>
                         </v-toolbar>
                         <v-card-text>
-                            <v-form>
+                            <v-form @submit.prevent="Logar">
                                 <v-text-field
                                         placeholder="E-mail"
                                         outlined
@@ -39,42 +39,43 @@
                                         @click:append="show_password = !show_password"
                                         color="teal accent-3"
                                 ></v-text-field>
+
+                                <v-layout align-center justify-center row wrap>
+                                    <v-flex xs12>
+                                        <div class="text-center">
+                                            <v-btn
+                                                    block
+                                                    tile
+                                                    class="white--text"
+                                                    color="teal accent-3"
+                                                    :disabled="!formIsValid || loader"
+                                                    :loading="loader"
+                                                    type="submit"
+                                            >
+                                                Login
+                                                <template v-slot:loader>
+                                                    <span>Aguarde...</span>
+                                                </template>
+                                            </v-btn>
+                                            <br/>
+                                            <v-flex xs12>
+                                                <div>
+                                                    <v-btn
+                                                            block
+                                                            tile
+                                                            outlined
+                                                            color="teal accent-3"
+                                                            to="/"
+                                                    >
+                                                        Ainda Não tem uma conta? <v-icon>touch_app</v-icon> Cadastro
+                                                    </v-btn>
+                                                </div>
+                                            </v-flex>
+                                        </div>
+                                    </v-flex>
+                                </v-layout>
                             </v-form>
 
-                            <v-layout align-center justify-center row wrap>
-                                <v-flex xs12>
-                                    <div class="text-center">
-                                        <v-btn
-                                                block
-                                                tile
-                                                class="white--text"
-                                                color="teal accent-3"
-                                                :disabled="!formIsValid"
-                                                :loading="loading"
-                                                @click="loader = 'loading'"
-                                        >
-                                            Login
-                                            <template v-slot:loader>
-                                                <span>Aguarde...</span>
-                                            </template>
-                                        </v-btn>
-                                        <br/>
-                                        <v-flex xs12>
-                                            <div>
-                                                <v-btn
-                                                        block
-                                                        tile
-                                                        outlined
-                                                        color="teal accent-3"
-                                                        to="/"
-                                                >
-                                                    Ainda Não tem uma conta? <v-icon>touch_app</v-icon> Cadastro
-                                                </v-btn>
-                                            </div>
-                                        </v-flex>
-                                    </div>
-                                </v-flex>
-                            </v-layout>
                         </v-card-text>
                     </v-card>
                 </v-flex>
@@ -90,8 +91,6 @@
             size: null,
             AZ: null,
             number: null,
-            loader: null,
-            loading: false,
             email: null,
             password: null,
             show_password: false,
@@ -100,8 +99,22 @@
             formIsValid() {
                 return this.email && this.password && this.size === true && this.AZ === true && this.number == true
             },
+            user(){
+                return this.$store.getters.user
+            },
+            error(){
+                return this.$store.getters.error
+            },
+            loader(){
+                return this.$store.getters.loader
+            },
         },
         watch: {
+            user(value){
+                if(value !== null && value !== undefined){
+                    this.$router.push('/Administration')
+                }
+            },
             password(val) {
                 if (val.length >= 6) {
                     this.size = true
@@ -119,19 +132,12 @@
                     this.number = false
                 }
             },
-            loader () {
-                const l = this.loader
-                this[l] = !this[l]
-
-                setTimeout(() => (this.redirect()), 3000)
-
-                this.loader = null
-            },
         },
         methods:{
-            redirect(){
-                this.$router.push('/Administration')
-            },
+            Logar(){
+                this.loader = true
+                this.$store.dispatch('logIn',{email:this.email,password:this.password})
+            }
         }
     }
 </script>
