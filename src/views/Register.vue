@@ -77,8 +77,13 @@
                                                 class="white--text"
                                                 color="teal accent-3"
                                                 :disabled="!formIsValid"
+                                                :loading="loading"
+                                                @click="loader = 'loading'"
                                         >
                                             Criar Conta
+                                            <template v-slot:loader>
+                                                <span>Aguarde...</span>
+                                            </template>
                                         </v-btn>
                                         <br/>
                                         <v-flex xs12>
@@ -90,7 +95,7 @@
                                                         color="teal accent-3"
                                                         to="/Login"
                                                 >
-                                                    Já tem uma conta? Login
+                                                    Já tem uma conta? <v-icon>touch_app</v-icon> Login
                                                 </v-btn>
                                             </div>
                                         </v-flex>
@@ -109,6 +114,8 @@
 <script>
     export default {
         data: () => ({
+            loader: null,
+            loading: false,
             size: false,
             AZ: false,
             number: false,
@@ -121,7 +128,7 @@
         }),
         computed: {
             formIsValid() {
-                return this.name && this.email && this.password && this.confirm_password
+                return this.name && this.email && this.password && this.confirm_password && this.samePasswords === true
             },
             passwords() {
                 if (this.password !== this.confirm_password) {
@@ -150,8 +157,20 @@
                 } else {
                     this.number = false
                 }
-
             },
+            loader () {
+                const l = this.loader
+                this[l] = !this[l]
+
+                setTimeout(() => (this.redirect()), 3000)
+
+                this.loader = null
+            },
+        },
+        methods:{
+            redirect(){
+                this.$router.push('/Administration')
+            }
         }
     }
 </script>

@@ -50,8 +50,13 @@
                                                 class="white--text"
                                                 color="teal accent-3"
                                                 :disabled="!formIsValid"
+                                                :loading="loading"
+                                                @click="loader = 'loading'"
                                         >
                                             Login
+                                            <template v-slot:loader>
+                                                <span>Aguarde...</span>
+                                            </template>
                                         </v-btn>
                                         <br/>
                                         <v-flex xs12>
@@ -63,7 +68,7 @@
                                                         color="teal accent-3"
                                                         to="/"
                                                 >
-                                                    Ainda Não tem uma conta? Cadastro
+                                                    Ainda Não tem uma conta? <v-icon>touch_app</v-icon> Cadastro
                                                 </v-btn>
                                             </div>
                                         </v-flex>
@@ -82,15 +87,52 @@
 <script>
     export default {
         data: () => ({
+            size: null,
+            AZ: null,
+            number: null,
+            loader: null,
+            loading: false,
             email: null,
             password: null,
             show_password: false,
         }),
         computed: {
             formIsValid() {
-                return this.email && this.password
+                return this.email && this.password && this.size === true && this.AZ === true && this.number == true
             },
         },
+        watch: {
+            password(val) {
+                if (val.length >= 6) {
+                    this.size = true
+                } else {
+                    this.size = false
+                }
+                if (val.toLowerCase() == val) {
+                    this.AZ = false
+                } else {
+                    this.AZ = true
+                }
+                if (val.replace(/[^0-9]/g, '').length > 0) {
+                    this.number = true
+                } else {
+                    this.number = false
+                }
+            },
+            loader () {
+                const l = this.loader
+                this[l] = !this[l]
+
+                setTimeout(() => (this.redirect()), 3000)
+
+                this.loader = null
+            },
+        },
+        methods:{
+            redirect(){
+                this.$router.push('/Administration')
+            },
+        }
     }
 </script>
 
