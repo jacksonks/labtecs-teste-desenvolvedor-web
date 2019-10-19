@@ -63,7 +63,6 @@
                                                     <v-btn
                                                             block
                                                             tile
-                                                            outlined
                                                             color="teal accent-3"
                                                             to="/"
                                                     >
