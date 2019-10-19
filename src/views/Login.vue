@@ -104,10 +104,7 @@
             },
             error(){
                 return this.$store.getters.error
-            },
-            loader(){
-                return this.$store.getters.loader
-            },
+            }
         },
         watch: {
             user(value){
@@ -135,7 +132,6 @@
         },
         methods:{
             Logar(){
-                this.loader = true
                 this.$store.dispatch('logIn',{email:this.email,password:this.password})
             }
         }

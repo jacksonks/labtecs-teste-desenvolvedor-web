@@ -16,15 +16,10 @@ export const store = new Vuex.Store({
         User
     },
     state: {
-        loader: false,
         error: null,
         email:null,
     },
     mutations: {
-        setLoader(state, payload) {
-            state.loading = payload
-        },
-
         setError(state, payload) {
             state.error = payload
         },
@@ -61,9 +56,6 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
-        loader(state) {
-            return state.loading
-        },
         error(state) {
             return state.error
         },

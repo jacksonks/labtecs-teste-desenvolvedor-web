@@ -18,7 +18,6 @@ export default {
     },
     actions: {
         registerUser({commit}, payload) {
-            commit('setLoader', true)
             this.$http.post('api/auth/register', {
                 email:payload.email,password:payload.password, password_confirmation:payload.confirm_password
             })
@@ -35,14 +34,12 @@ export default {
                 })
                 .catch((e) => {
                 })
-            commit('setLoader', false)
         },
         logOut ({commit}) {
             commit('clearUser')
         },
 
         logIn({commit}, payload) {
-            commit('setLoader', true)
             this.$http.post('api/auth/login', {
                 email:payload.email,password:payload.password
             })
@@ -51,7 +48,6 @@ export default {
                 })
                 .catch((e) => {
                 })
-            commit('setLoader', false)
         },
     },
     getters: {

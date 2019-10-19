@@ -149,9 +149,6 @@
             error(){
                 return this.$store.getters.error
             },
-            loader(){
-                return this.$store.getters.loader
-            },
         },
         watch: {
             user(value){
@@ -180,7 +177,6 @@
 
         methods:{
             Registrar(){
-                this.loader = true;
                 this.$store.dispatch('registerUser',{email:this.email,password:this.password,confirm_password:this.confirm_password})
             }
         }
