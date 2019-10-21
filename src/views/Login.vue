@@ -48,8 +48,7 @@
                                                     tile
                                                     class="white--text"
                                                     color="teal accent-3"
-                                                    :disabled="!formIsValid || loader"
-                                                    :loading="loader"
+                                                    :disabled="!formIsValid"
                                                     type="submit"
                                             >
                                                 Login
